@@ -7,7 +7,8 @@ ldap:
     - Администраторы домена
 spring:
   r2dbc:
-    url: "r2dbc:postgresql://arb-pg-1c-prod:5432/pass-storage"
-    username: "postgres"
-    password: "5556360"
-
+    url: r2dbc:postgresql://arb-pg-1c-prod:5432/pass_storage
+    username: postgres
+    password: 5556360
+  flyway:
+    url: jdbc:postgresql://arb-pg-1c-prod:5432/pass_storage

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 
@@ -12,9 +13,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table("app_users")
-public class AppUser {
+@Table("password_folders")
+public class PasswordFolder {
     @Id
     private String id;
     private String name;
+    @Column("folder_id")
+    private String folderId;
 }

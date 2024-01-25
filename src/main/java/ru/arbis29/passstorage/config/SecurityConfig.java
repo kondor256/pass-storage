@@ -51,6 +51,7 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         http
                 .authorizeExchange(exchanges -> exchanges
+                        .pathMatchers("/favicon.ico").permitAll()
                         .anyExchange().hasRole("APP_ADMIN")//.authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

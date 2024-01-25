@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
-import org.springframework.ldap.odm.annotations.Id;
+
 
 import java.util.Set;
 
@@ -20,8 +21,12 @@ public class StoredPassword {
     private String id;
     private String description;
     private String url;
+    private String login;
     private String password;
 
     @Column("owner_user_id")
     private String ownerUserId;
+
+    @Column("folder_id")
+    private String folderId;
 }

@@ -28,6 +28,10 @@ public class passwordController {
         return Mono.just("test");
     }
 
+    @GetMapping(BASE_URI + "/empty")
+    Mono<PasswordDTO> getEmptyPass(Principal principal){
+        return Mono.just(PasswordDTO.builder().build());
+    }
     @GetMapping(BASE_URI + "/list")
     Flux<PasswordDTO> getPasswordList(Principal principal){
         log.warn(principal.getName());
