@@ -5,35 +5,40 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.domain.Persistable;
-import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.UUID;
-
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table("password_folders")
-public class PasswordFolder implements Persistable<String> {
+@Table("users_keys")
+public class UsersKeys implements Persistable<String> {
     @Id
-    private String id;
-    private String name;
-    @Column("folder_id")
-    private String folderId;
-    @Column("owner_user_id")
-    private String ownerUserId;
+    private String userId;
+    private byte[] privKey;
+    private byte[] pubKey;
 
+    @Transient
+    private Boolean isNew;
+
+    @Override
+    public String getId() {
+        return userId;
+    }
 
     @Override
     public boolean isNew() {
-        if (StringUtil.isNullOrEmpty(this.id)){
-            this.id = UUID.randomUUID().toString();
+        if (StringUtil.isNullOrEmpty(this.userId)){
+            this.userId = UUID.randomUUID().toString();
             return true;
         }
-        return false;
+        if (isNew == null) return false;
+        return isNew;
     }
 }

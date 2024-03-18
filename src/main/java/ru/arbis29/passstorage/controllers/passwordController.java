@@ -2,12 +2,11 @@ package ru.arbis29.passstorage.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.arbis29.passstorage.model.PasswordDTO;
@@ -34,13 +33,22 @@ public class passwordController {
     }
     @GetMapping(BASE_URI + "/list")
     Flux<PasswordDTO> getPasswordList(Principal principal){
-        log.warn(principal.getName());
-        return passwordService.listPasswords();
+        return passwordService.listPasswords(principal);
     }
 
     @PostMapping(BASE_URI)
-    Mono<ResponseEntity<Void>> createNewPass(@Validated @RequestBody PasswordDTO passwordDTO){
-        return passwordService.saveNewPass(passwordDTO)
-                .map(savedPass -> ResponseEntity.ok().build());
+    Mono<ResponseEntity<PasswordDTO>> createNewPass(Principal principal, @Validated @RequestBody PasswordDTO passwordDTO){
+        return passwordService.saveNewPass(passwordDTO,principal)
+                .map(ResponseEntity::ok);
+    }
+
+    @DeleteMapping(BASE_URI)
+    Mono<ResponseEntity<Void>> deletePass(Principal principal, @Validated @RequestBody PasswordDTO passwordDTO){
+//        return passwordService.getPassById(passwordDTO.getId())
+//                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
+//                .map(foundPass -> passwordService.deletePassById(foundPass.getId()))
+//                .thenReturn(ResponseEntity.ok().build());
+        return passwordService.deletePassById(passwordDTO.getId(),principal)
+                .thenReturn(ResponseEntity.ok().build());
     }
 }

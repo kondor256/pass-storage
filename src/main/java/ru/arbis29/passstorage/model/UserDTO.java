@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PasswordDTO {
+public class UserDTO {
     private String id;
-    private String description;
-    private String url;
+    private String name;
     private String login;
-    private String password;
-    private byte[] encryptedPassword;
-
-    private String folderId;
-    private String ownerUserId;
 }

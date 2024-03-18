@@ -19,7 +19,6 @@ public class LdapGrantedAuthoritiesMapper implements GrantedAuthoritiesMapper {
         Set<LdapAuthority> roles = EnumSet.noneOf(LdapAuthority.class);
 
         for (GrantedAuthority authority : authorities) {
-//            System.out.println(authority);
             if (adminRoles.contains(authority.getAuthority())){
                 roles.add(LdapAuthority.APP_ADMIN);
             }

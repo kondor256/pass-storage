@@ -23,7 +23,7 @@ function PasswordString(props){
             ]}
             disablePadding
         >
-            <ListItemButton dense onClick={props.onClickPass.bind(null,props.pass)}>
+            <ListItemButton dense onDoubleClick={props.onClickPass.bind(null,props.pass)}>
                 <ListItemIcon>
                     <LockIcon />
                 </ListItemIcon>
