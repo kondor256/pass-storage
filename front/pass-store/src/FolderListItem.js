@@ -25,19 +25,23 @@ function FolderListItem(props){
         setOpen(!open);
     };
     const stringOnClick = (folderTree) => {
-        if (props.activeFolder.id === folderTree.folder.id && folderTree.folder.id !== "0")
+        if (props.activeFolder.id === folderTree.folder.id && folderTree.folder.id !== "0" && !folderTree.folder.shared)
             props.handleEditFolder(folderTree.folder);
         else
             props.handleActivateFolder(folderTree);
     }
 
+    const addButton = folder.folder.shared?null:
+        <IconButton key="buttonShare" edge="end" aria-label="share" sx={{marginRight: 0}}
+                    onClick={props.handleNewFolder.bind(null,folder.folder)}>
+        <ControlPointIcon sx={{color: green[700]}}/>
+    </IconButton>;
+
+
     return([
         <ListItem key={folder.folder.id+folder.children.length} sx={{paddingTop: 0, paddingBottom: 0}}
                   secondaryAction={[
-                      <IconButton key="buttonShare" edge="end" aria-label="share" sx={{marginRight: 0}}
-                                  onClick={props.handleNewFolder.bind(null,folder.folder)}>
-                          <ControlPointIcon sx={{color: green[700]}}/>
-                      </IconButton>,
+                      addButton,
                       folder.children.length>0?(open ? <ExpandLessIcon key="buttonExpand"
                                              onClick={handleClick}/> : <ExpandMoreIcon key="buttonExpand" onClick={handleClick}/>):null
                   ]}

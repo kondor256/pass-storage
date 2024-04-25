@@ -71,6 +71,12 @@ public class UserServicePsql implements UserService {
     }
 
     @Override
+    public Mono<UserDTO> getUser(Principal principal) {
+        String userId = getUserId(principal);
+        return getUserById(userId);
+    }
+
+    @Override
     public Mono<UserDTO> saveUser(UserDTO user) {
         final String userId = user.getId();
         final String name = user.getName();
@@ -83,9 +89,8 @@ public class UserServicePsql implements UserService {
                 .flatMap(foundUser -> {
                     foundUser.setLogin(login);
                     foundUser.setName(name);
-                    return userRepo.save(foundUser)
-                            .map(userMapper::userToDTO);
-                    });
+                    return userRepo.save(foundUser);})
+                .map(userMapper::userToDTO);
     }
 
     @Override

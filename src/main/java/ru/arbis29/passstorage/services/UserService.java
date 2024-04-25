@@ -15,6 +15,7 @@ public interface UserService {
     Flux<UserDTO> listUsers();
     Mono<UserDTO> getUserById(String id);
     Mono<UserDTO> getUserByLogin(String login);
+    Mono<UserDTO> getUser(Principal principal);
     Mono<UserDTO> saveUser(UserDTO user);
     Mono<Void> deleteUser(UserDTO user);
 

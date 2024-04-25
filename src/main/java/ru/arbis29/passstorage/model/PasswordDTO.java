@@ -19,4 +19,6 @@ public class PasswordDTO {
 
     private String folderId;
     private String ownerUserId;
+
+    private boolean shared;
 }

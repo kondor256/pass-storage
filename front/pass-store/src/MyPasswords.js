@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import {Button, Collapse, Divider, Grid, IconButton, ListItem, ListItemIcon, Modal} from "@mui/material";
+import {Button, Collapse, Divider, Grid, IconButton, ListItem, ListItemIcon, Modal, Snackbar} from "@mui/material";
 
 import List from '@mui/material/List';
 import ListItemButton from "@mui/material/ListItemButton";
@@ -9,6 +9,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import CloseIcon from '@mui/icons-material/Close';
 
 import PasswordString from "./PasswordString";
 import { FormPassword } from "./FormPassword";
@@ -16,13 +17,13 @@ import {green, red} from "@mui/material/colors";
 import ShareIcon from "@mui/icons-material/Share";
 import FolderListItem from "./FolderListItem";
 import {FormFolder} from "./FormFolder";
-
-const PASS_API = "/api/v1/pass";
-const FOLDER_API = "/api/v1/folder";
+import {FormSharePass} from "./FormSharePass";
+import { PASS_API, FOLDER_API, USER_API } from "./ApiAddresses";
 
 function MyPasswords(props){
     const [passList, setPassList] = useState([]);
     const [editedPass, setEditedPass] = useState(null);
+    const [sharePass, setSharePass] = useState(null);
     const [folderTree, setFolderTree] = useState(null);
     const [editedFolder, setEditedFolder] = useState(null);
     const [activeFolder, setActiveFolder] = useState(null);
@@ -30,6 +31,11 @@ function MyPasswords(props){
     const [openedFolders, setOpenedFolders] = useState(new Map());
     const [foldersChanged, setFoldersChanged] = useState(false);
     const [folderList, setFolderList] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userList, setUserList] = useState([]);
+
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [textSnackbar, setTextSnackbar] = useState("");
 
     function getNewFolderTreeItem(folder){
         return {folder: folder, children: []};
@@ -80,10 +86,23 @@ function MyPasswords(props){
 
         });
     }
+    const updateUserList = () => {
+        fetch(USER_API+"/list").then(resp => resp.json()).then(_userList => {
+            const users = [];
+            for (const user of _userList) {
+                users.push(user);
+            }
+            setUserList(users);
+        });
+        fetch(USER_API+"/current").then(resp => resp.json()).then(_user => {
+            setCurrentUser(_user);
+        });
+    }
 
     useEffect(() => {
         updatePassList();
         updateFolders();
+        updateUserList();
     },[])
 
     const handlePassFormClose = () => {
@@ -91,6 +110,9 @@ function MyPasswords(props){
     }
     const handleFolderFormClose = () => {
         setEditedFolder(null);
+    }
+    const handleSharePassFormClose = () => {
+        setSharePass(null);
     }
 
     const createPass = () => {
@@ -178,7 +200,8 @@ function MyPasswords(props){
     }
 
     const idInFolder = (folderId, folderTree) => {
-        if (!folderId && folderTree.folder.id === "0") return true;
+        //if (!folderId && folderTree.folder.id === "0") return true;
+        if (folderTree.folder.id === "0") return true;
         if (folderTree.folder.id === folderId) return true;
         for (const childFolder of folderTree.children){
             if (idInFolder(folderId,childFolder)) return true;
@@ -188,6 +211,33 @@ function MyPasswords(props){
     const idInActiveFolder = (folderId) => {
         if (!activeTreeFolder) return true;
         return idInFolder(folderId,activeTreeFolder);
+    }
+
+
+    const handleCloseSnackbar = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpenSnackbar(false);
+    }
+    const actionSnackbar = (
+        <React.Fragment>
+            {/*<Button color="secondary" size="small" onClick={handleCloseSnackbar}>*/}
+            {/*    UNDO*/}
+            {/*</Button>*/}
+            <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseSnackbar}
+            >
+                <CloseIcon fontSize="small" />
+            </IconButton>
+        </React.Fragment>
+    )
+    const showMessage = (textMessage) => {
+        setTextSnackbar(textMessage);
+        setOpenSnackbar(true);
     }
 
     return([
@@ -215,7 +265,12 @@ function MyPasswords(props){
                 >
                     {passList.map((pass) => !idInActiveFolder(pass.folderId)?null:
                        <PasswordString key={"pass"+pass.id}
-                                       text={pass.description} pass={pass} onClickPass={(pass) => {setEditedPass(pass)}}/>
+                                       text={pass.description}
+                                       pass={pass}
+                                       onClickPass={(pass) => {setEditedPass(pass)}}
+                                       onClickSharePass={(pass) => {setSharePass(pass)}}
+                                       handleShowMessage={showMessage}
+                       />
                     )}
                 </List>
                 <Divider sx={{margin: 1, border: 0}} />
@@ -231,7 +286,9 @@ function MyPasswords(props){
                           folderList={folderList}
                           handleClose={handlePassFormClose}
                           handleSavePass={postPass}
-                          handleDeletePass={deletePass}/>
+                          handleDeletePass={deletePass}
+                          handleShowMessage={showMessage}
+            />
         </Modal>,
         <Modal
             key="FolderForm"
@@ -244,7 +301,27 @@ function MyPasswords(props){
                         handleSaveFolder={postFolder}
                         handleDeleteFolder={deleteFolder}
             />
-        </Modal>
+        </Modal>,
+        <Modal
+            key="ShareForm"
+            open={sharePass != null}
+            onClose={handleSharePassFormClose}
+        >
+            <FormSharePass handleClose={handleSharePassFormClose}
+                           pass={sharePass}
+                           currentUser={currentUser}
+                           userList={userList}
+            />
+
+        </Modal>,
+        <Snackbar
+            key="MesagesSnackbar"
+            open={openSnackbar}
+            autoHideDuration={2000}
+            onClose={handleCloseSnackbar}
+            message={textSnackbar}
+            action={actionSnackbar}
+        />
     ])
 }
 

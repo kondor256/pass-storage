@@ -19,9 +19,9 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
 import {styleModal} from "./StyleModal";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import {copyToClipboard} from "./copyToClipboard";
 
-
-//function FormPassword(props){
 export const FormPassword = React.forwardRef((props, ref) => {
     const [pass, setPass] = useState({...props.pass});
     const [parentFolder, setParentFolder] = useState(null);
@@ -55,10 +55,21 @@ export const FormPassword = React.forwardRef((props, ref) => {
         props.handleClose();
     }
 
+    const copyLoginToClipboard = () => {
+        copyToClipboard(pass.login).then(() => props.handleShowMessage("Login copied!"));
+    }
+    const copyURLToClipboard = () => {
+        copyToClipboard(pass.url).then(() => props.handleShowMessage("Address copied!"));
+    }
+    const copyPassToClipboard = () => {
+        copyToClipboard(pass.password).then(() => props.handleShowMessage("Password copied!"));
+    }
+
     return(
         <Box sx={styleModal}>
             <Typography variant="h4">Password</Typography>
             <Autocomplete
+                disabled={pass.shared}
                 disablePortal
                 value={parentFolder}
                 renderInput={(params) => <TextField {...params}  label="Parent folder" variant="standard" fullWidth={true} />}
@@ -70,10 +81,26 @@ export const FormPassword = React.forwardRef((props, ref) => {
             <Divider sx={{margin: 1, border: 0}} />
             <TextField id="valUrl" label="URL" variant="standard" fullWidth={true}
                        defaultValue={pass.url}
-                       onChange={(e) => {pass.url = e.target.value}} />
+                       onChange={(e) => {pass.url = e.target.value}}
+                       InputProps={{endAdornment: <InputAdornment position="end">
+                               <IconButton key="buttonCopy" edge="end"
+                                           onClick={copyURLToClipboard}
+                               >
+                                   <ContentCopyIcon />
+                               </IconButton>
+                           </InputAdornment>}}
+            />
             <TextField id="valLogin" label="User name" variant="standard" fullWidth={true}
                        defaultValue={pass.login}
-                       onChange={(e) => {pass.login = e.target.value}} />
+                       onChange={(e) => {pass.login = e.target.value}}
+                       InputProps={{endAdornment: <InputAdornment position="end">
+                               <IconButton key="buttonCopy" edge="end"
+                                           onClick={copyLoginToClipboard}
+                               >
+                                   <ContentCopyIcon />
+                               </IconButton>
+                           </InputAdornment>}}
+            />
             <FormControl fullWidth variant="standard">
                 <InputLabel htmlFor="valPassword">Password</InputLabel>
                 <Input
@@ -90,6 +117,11 @@ export const FormPassword = React.forwardRef((props, ref) => {
                             >
                                 {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
                             </IconButton>
+                            <IconButton key="buttonCopy" edge="end"
+                                        onClick={copyPassToClipboard}
+                            >
+                                <ContentCopyIcon />
+                            </IconButton>
                         </InputAdornment>
                     }
                 />
@@ -100,9 +132,9 @@ export const FormPassword = React.forwardRef((props, ref) => {
                        onChange={(e) => {pass.description = e.target.value}} />
             <Divider sx={{margin: 1, border: 0}} />
             <Box sx={{ m: 1 }}>
-                <Button variant="outlined" onClick={editPassOK}>OK</Button>
+                <Button disabled={pass.shared} variant="outlined" onClick={editPassOK}>OK</Button>
                 <Button variant="outlined" onClick={props.handleClose}>Cancel</Button>
-                {newPass?null:<Button variant="outlined" startIcon={<DeleteForeverIcon sx={{color: red[700]}}/>} onClick={deletePass}>DELETE</Button>}
+                {newPass || pass.shared?null:<Button variant="outlined" startIcon={<DeleteForeverIcon sx={{color: red[700]}}/>} onClick={deletePass}>DELETE</Button>}
             </Box>
         </Box>
     )

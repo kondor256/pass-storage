@@ -52,6 +52,7 @@ public class SecurityConfig {
         http
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/favicon.ico").permitAll()
+                        .pathMatchers("/built/**").permitAll()
                         .anyExchange().hasRole("APP_ADMIN")//.authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

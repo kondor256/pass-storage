@@ -14,4 +14,5 @@ public class FolderDTO {
     private String name;
     private String folderId;
     private String ownerUserId;
+    private boolean shared;
 }

@@ -12,9 +12,11 @@ import org.springframework.data.relational.core.mapping.Table;
 @AllArgsConstructor
 @Builder
 @Table("shared_passwords")
-public class SharedPasswords {
+public class SharedPassword {
     @Column("user_id")
     private String userId;
     @Column("password_id")
     private String passwordId;
+
+    private byte[] encryptedPassword;
 }

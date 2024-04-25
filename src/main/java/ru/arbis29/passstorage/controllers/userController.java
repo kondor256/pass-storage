@@ -29,4 +29,9 @@ public class userController {
     Flux<UserDTO> getUserList(Principal principal){
         return userService.listUsers();
     }
+
+    @GetMapping(BASE_URI+"/current")
+    Mono<UserDTO> getCurrentUser(Principal principal){
+        return userService.getUser(principal);
+    }
 }

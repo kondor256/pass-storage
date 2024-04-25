@@ -8,6 +8,7 @@ import java.security.Principal;
 
 public interface FolderService {
     Flux<FolderDTO> listFolders(Principal principal);
+    Flux<FolderDTO> listSharedFolders(Principal principal);
     Mono<FolderDTO> getFolderById(String id, Principal principal);
     Mono<FolderDTO> saveNewFolder(FolderDTO folderDTO, Principal principal);
 
