@@ -3,6 +3,7 @@ package ru.arbis29.passstorage.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.ldap.userdetails.LdapUserDetails;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -46,6 +47,8 @@ public class UserServicePsql implements UserService {
             Object userDetails = ((UsernamePasswordAuthenticationToken) principal).getPrincipal();
             if (userDetails instanceof LdapUserDetails){
                 return getUser((LdapUserDetails) userDetails).getId();
+            } else if (userDetails instanceof User){
+                return ((User) userDetails).getUsername();
             } else return null;
         }
         return null;
