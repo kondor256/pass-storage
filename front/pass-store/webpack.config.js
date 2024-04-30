@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        main: './src/passStorageMainApp.js',
+        main: './src/PassStorageMainApp.js',
         // downloads: './src/main/js/DownloadsApp.js'
     },
     cache: false,
