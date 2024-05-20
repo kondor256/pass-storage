@@ -10,5 +10,6 @@ spring:
     password:
   flyway:
     url: jdbc:postgresql://pg-server-addr:5432/pass_storage
-
+server:
+  port: 8080
 #debug: true

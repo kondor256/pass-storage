@@ -82,7 +82,6 @@ function MyPasswords(props){
             setOpenedFolders(new Map(openedFolders));
             setFoldersChanged(v => !v);
             setFolderList(lFolderList);
-            // setFolderTree((oldTree) => {console.log(oldTree); return folders;});
 
         });
     }
@@ -154,7 +153,6 @@ function MyPasswords(props){
     }
 
     const createFolder = (parentFolder) => {
-        //console.log("Parent folder",parentFolder);
         fetch(FOLDER_API+"/empty").then(resp => resp.json()).then(newFolder => {
             if (parentFolder.id !== "0")
                 newFolder.folderId = parentFolder.id;
@@ -200,7 +198,6 @@ function MyPasswords(props){
     }
 
     const idInFolder = (folderId, folderTree) => {
-        //if (!folderId && folderTree.folder.id === "0") return true;
         if (folderTree.folder.id === "0") return true;
         if (folderTree.folder.id === folderId) return true;
         for (const childFolder of folderTree.children){
@@ -222,9 +219,6 @@ function MyPasswords(props){
     }
     const actionSnackbar = (
         <React.Fragment>
-            {/*<Button color="secondary" size="small" onClick={handleCloseSnackbar}>*/}
-            {/*    UNDO*/}
-            {/*</Button>*/}
             <IconButton
                 size="small"
                 aria-label="close"
@@ -265,7 +259,7 @@ function MyPasswords(props){
                 >
                     {passList.map((pass) => !idInActiveFolder(pass.folderId)?null:
                        <PasswordString key={"pass"+pass.id}
-                                       text={pass.description}
+                                       // text={pass.description}
                                        pass={pass}
                                        onClickPass={(pass) => {setEditedPass(pass)}}
                                        onClickSharePass={(pass) => {setSharePass(pass)}}

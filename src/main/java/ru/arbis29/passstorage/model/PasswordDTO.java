@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PasswordDTO {
     private String id;
+    private String name;
     private String description;
     private String url;
     private String login;

@@ -22,6 +22,7 @@ import java.util.UUID;
 public class StoredPassword implements Persistable<String> {
     @Id
     private String id;
+    private String name;
     private String description;
     private String url;
     private String login;

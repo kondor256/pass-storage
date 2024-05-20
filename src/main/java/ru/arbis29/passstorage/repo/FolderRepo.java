@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 import ru.arbis29.passstorage.domain.PasswordFolder;
 
 public interface FolderRepo extends ReactiveCrudRepository<PasswordFolder,String> {
+//    Flux<PasswordFolder> findAllById(String id);
     Flux<PasswordFolder> findAllByOrderByName();
     Flux<PasswordFolder> findAllByOwnerUserIdOrderByName(String userId);
     Mono<PasswordFolder> findFirstByIdAndOwnerUserId(String id, String userId);

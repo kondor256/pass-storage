@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 
-import {IconButton, ListItem, ListItemIcon} from "@mui/material";
+import {IconButton, Link, ListItem, ListItemIcon} from "@mui/material";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemButton from "@mui/material/ListItemButton";
 
@@ -13,6 +13,14 @@ import {copyToClipboard} from "./copyToClipboard";
 function PasswordString(props){
     const copyPassToClipboard = () => {
         copyToClipboard(props.pass.password).then(() => props.handleShowMessage("Password copied!"));
+    }
+    const isURLValid = (url) => {
+        try {
+            const testUrl = new URL(url);
+        } catch (e) {
+            return false;
+        }
+        return true;
     }
 
     return([
@@ -36,12 +44,11 @@ function PasswordString(props){
                 <ListItemIcon>
                     <LockIcon />
                 </ListItemIcon>
-                <ListItemText primary={props.text} />
+                <ListItemText primary={props.pass.name}
+                              secondary={props.pass.url && isURLValid(props.pass.url)?<Link href={props.pass.url} underline="hover">{props.pass.url}</Link>:null}/>
+                {/*{props.pass.url && isURLValid(props.pass.url)?<ListItemText primary={<link href={props.pass.url}>props.pass.url</link>} primaryTypographyProps={{align: 'left'}}/>:null}*/}
             </ListItemButton>
         </ListItem>
-        // <ListItem>
-        //     {props.text}
-        // </ListItem>
     ])
 }
 

@@ -79,6 +79,9 @@ export const FormPassword = React.forwardRef((props, ref) => {
                 getOptionLabel={folder => folder.name}
                 isOptionEqualToValue={(o,v) => (o.id === v.id)}/>
             <Divider sx={{margin: 1, border: 0}} />
+            <TextField id="valName" label="Name" variant="standard" fullWidth={true}
+                       defaultValue={pass.name}
+                       onChange={(e) => {pass.name = e.target.value}} />
             <TextField id="valUrl" label="URL" variant="standard" fullWidth={true}
                        defaultValue={pass.url}
                        onChange={(e) => {pass.url = e.target.value}}

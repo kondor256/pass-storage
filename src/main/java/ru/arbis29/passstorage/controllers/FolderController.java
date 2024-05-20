@@ -15,8 +15,8 @@ import java.security.Principal;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-public class folderController {
-    private static final String BASE_URI = "/api/v1/folder";
+public class FolderController {
+    public static final String BASE_URI = "/api/v1/folder";
 
     private final FolderService folderService;
 

@@ -44,7 +44,8 @@ public class FolderServicePsql implements FolderService {
                 .flatMap(passwordRepo::findById)
                 .filter(storedPassword -> storedPassword.getFolderId() != null)
                 .map(StoredPassword::getFolderId)
-                .flatMap(folderRepo::findById);
+                .collectList().flux()
+                .flatMap(folderRepo::findAllById);
         Flux<FolderDTO> userFolders = sharedPasswordRepo.findAllByUserId(userId)
                 .map(SharedPassword::getPasswordId)
                 .flatMap(passwordRepo::findById)

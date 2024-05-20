@@ -16,14 +16,12 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import ru.arbis29.passstorage.domain.AppUser;
-import ru.arbis29.passstorage.mappers.UserMapper;
 import ru.arbis29.passstorage.mappers.UserMapperImpl;
 import ru.arbis29.passstorage.model.UserDTO;
 import ru.arbis29.passstorage.repo.AppUserRepo;
-import ru.arbis29.passstorage.services.UserService;
 import ru.arbis29.passstorage.services.UserServicePsql;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(controllers = UserController.class)
