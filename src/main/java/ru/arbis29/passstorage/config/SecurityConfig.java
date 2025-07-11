@@ -53,7 +53,8 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/favicon.ico").permitAll()
                         .pathMatchers("/built/**").permitAll()
-                        .anyExchange().hasRole("APP_ADMIN")//.authenticated()
+                        //.anyExchange().hasRole("APP_ADMIN")//.authenticated()
+                        .anyExchange().hasRole("APP_USER")
                 )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin((formLoginConfigurer)->{})

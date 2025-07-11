@@ -23,6 +23,7 @@ public class LdapGrantedAuthoritiesMapper implements GrantedAuthoritiesMapper {
                 roles.add(LdapAuthority.APP_ADMIN);
             }
         }
+        roles.add(LdapAuthority.APP_USER);
 
         return roles;
     }
