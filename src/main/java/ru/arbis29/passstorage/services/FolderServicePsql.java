@@ -17,7 +17,6 @@ import ru.arbis29.passstorage.repo.PasswordRepo;
 import ru.arbis29.passstorage.repo.SharedPasswordRepo;
 
 import java.security.Principal;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -89,6 +88,7 @@ public class FolderServicePsql implements FolderService {
 //        return folderRepo.save(folderMapper.DTOToFld(folderDTO))
 //                .map(folderMapper::fldToDTO);
         return folderRepo.findFirstByIdAndOwnerUserId(folder.getId(), userId)
+                .switchIfEmpty(Mono.just(folder))
                 .flatMap(foundFolder -> folderRepo.save(folder)
                         .map(folderMapper::fldToDTO));
     }
