@@ -8,10 +8,8 @@ import ru.arbis29.passstorage.domain.UsersKeys;
 import ru.arbis29.passstorage.repo.KeysRepo;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
-import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -102,6 +100,7 @@ public class KeysServicePsql implements KeysService {
     @Override
     public Mono<byte[]> encryptPass(String userId, String pass) {
         return keysRepo.findById(userId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Key not found for userId: " + userId)))
                 .flatMap(usersKeys -> {
                     try {
                         PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(usersKeys.getPrivKey());
@@ -122,6 +121,7 @@ public class KeysServicePsql implements KeysService {
     @Override
     public Mono<String> decryptPass(String userId, byte[] encryptedPass, String keyPass) {
         return keysRepo.findById(userId)
+                .switchIfEmpty(Mono.error(new IllegalArgumentException("Key not found for userId: " + userId)))
                 .flatMap(usersKeys -> {
                     try {
                         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(usersKeys.getPubKey());
