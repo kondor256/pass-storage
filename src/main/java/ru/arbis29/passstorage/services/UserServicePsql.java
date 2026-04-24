@@ -28,11 +28,13 @@ public class UserServicePsql implements UserService {
         String login = userDetails.getUsername().toLowerCase();
         StringBuilder userId = new StringBuilder();
         String[] sa = name.split(",");
+        String nameFromCN = "";
         for (String s : sa) {
-            if (s.startsWith("CN=")) name = s.substring(3);
-            if (s.startsWith("DC=")) userId.append((userId.length() == 0) ? "" : ".").append(s.substring(3));
+            if (s.startsWith("CN=") && nameFromCN.isEmpty()) nameFromCN = s.substring(3);
+            if (s.startsWith("DC=")) userId.append((userId.isEmpty()) ? "" : ".").append(s.substring(3));
         }
-        userId.append((userId.length() == 0) ? "" : "/").append(login);
+        if (!nameFromCN.isEmpty()) name = nameFromCN;
+        userId.append((userId.isEmpty()) ? "" : "/").append(login);
 
         return UserDTO.builder()
                 .id(userId.toString())
