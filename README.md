@@ -137,8 +137,11 @@ docker run -p 8080:8080 \
 ### Tests
 
 ```bash
-./mvnw test
+./mvnw test                              # all tests
+./mvnw test -Dtest=FolderServicePsqlTest # a single test class
 ```
+
+The suite covers the REST controllers (`@WebFluxTest` with `WebTestClient`) and the folder, key, password and user services (unit tests with mocked repositories).
 
 ## API
 
